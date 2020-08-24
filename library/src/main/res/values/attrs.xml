@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <declare-styleable name="MaterialSpinner" tools:ignore="ResourceName">
+        <attr name="ms_arrow_tint" format="color" />
+        <attr name="ms_hide_arrow" format="boolean" />
+        <attr name="ms_background_color" format="color" />
+        <attr name="ms_text_color" format="color" />
+        <attr name="ms_icon_size" format="dimension" />
+        <attr name="ms_dropdown_max_height" format="dimension" />
+        <attr name="ms_dropdown_height" format="dimension">
+            <enum name="fill_parent" value="-1" />
+            <enum name="match_parent" value="-1" />
+            <enum name="wrap_content" value="-2" />
+        </attr>
+        <attr name="ms_background_selector" format="integer" />
+        <attr name="ms_padding_top" format="dimension" />
+        <attr name="ms_padding_left" format="dimension" />
+        <attr name="ms_padding_bottom" format="dimension" />
+        <attr name="ms_padding_right" format="dimension" />
+        <attr name="ms_popup_padding_top" format="dimension" />
+        <attr name="ms_popup_padding_left" format="dimension" />
+        <attr name="ms_popup_padding_bottom" format="dimension" />
+        <attr name="ms_popup_padding_right" format="dimension" />
+        <attr name="ms_hint" format="string" />
+        <attr name="ms_hint_color" format="color" />
+        <attr name="ms_placeholder" format="reference" />
+    </declare-styleable>
+</resources>
