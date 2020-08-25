@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:ms_dropdown_height="wrap_content"
-        app:ms_dropdown_max_height="350dp"
-        app:ms_icon_size="@dimen/ms__icon_size"
-        app:ms_placeholder="@mipmap/ic_launcher" />
+        app:px_dropdown_height="wrap_content"
+        app:px_dropdown_max_height="350dp"
+        app:px_icon_size="@dimen/px__icon_size"
+        app:px_placeholder="@mipmap/ic_launcher" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -43,7 +43,7 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
-        val itemView = inflater.inflate(R.layout.ms__list_item, parent, false)
+        val itemView = inflater.inflate(R.layout.px__list_item, parent, false)
         val vh = ViewHolder(itemView)
         vh.itemView.setOnClickListener {
             val position = vh.adapterPosition

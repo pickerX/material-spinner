@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2016 Jared Rummler
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
 package com.pickerx.material.spinner
 
 import android.animation.ObjectAnimator
@@ -112,72 +96,72 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
         val paddingBottom: Int
 
         val resources = resources
-        val defaultPaddingTop = resources.getDimensionPixelSize(R.dimen.ms__padding_top)
+        val defaultPaddingTop = resources.getDimensionPixelSize(R.dimen.px__padding_top)
         var defaultPaddingRight = defaultPaddingTop
         var defaultPaddingLeft = defaultPaddingRight
 
         if (rtl) {
-            defaultPaddingRight = resources.getDimensionPixelSize(R.dimen.ms__padding_left)
+            defaultPaddingRight = resources.getDimensionPixelSize(R.dimen.px__padding_left)
         } else {
-            defaultPaddingLeft = resources.getDimensionPixelSize(R.dimen.ms__padding_left)
+            defaultPaddingLeft = resources.getDimensionPixelSize(R.dimen.px__padding_left)
         }
         val defaultPopupPaddingRight =
-            resources.getDimensionPixelSize(R.dimen.ms__popup_padding_left)
+            resources.getDimensionPixelSize(R.dimen.px__popup_padding_left)
         val defaultPopupPaddingBottom =
-            resources.getDimensionPixelSize(R.dimen.ms__popup_padding_top)
-        val defaultIconSize = resources.getDimensionPixelSize(R.dimen.ms__icon_size)
+            resources.getDimensionPixelSize(R.dimen.px__popup_padding_top)
+        val defaultIconSize = resources.getDimensionPixelSize(R.dimen.px__icon_size)
         try {
             backgroundColor =
-                ta.getColor(R.styleable.MaterialSpinner_ms_background_color, Color.WHITE)
+                ta.getColor(R.styleable.MaterialSpinner_px_background_color, Color.WHITE)
             backgroundSelector =
-                ta.getResourceId(R.styleable.MaterialSpinner_ms_background_selector, 0)
-            textColor = ta.getColor(R.styleable.MaterialSpinner_ms_text_color, defaultColor)
-            hintColor = ta.getColor(R.styleable.MaterialSpinner_ms_hint_color, defaultColor)
-            arrowColor = ta.getColor(R.styleable.MaterialSpinner_ms_arrow_tint, textColor)
-            hideArrow = ta.getBoolean(R.styleable.MaterialSpinner_ms_hide_arrow, false)
-            hintText = ta.getString(R.styleable.MaterialSpinner_ms_hint) ?: ""
+                ta.getResourceId(R.styleable.MaterialSpinner_px_background_selector, 0)
+            textColor = ta.getColor(R.styleable.MaterialSpinner_px_text_color, defaultColor)
+            hintColor = ta.getColor(R.styleable.MaterialSpinner_px_hint_color, defaultColor)
+            arrowColor = ta.getColor(R.styleable.MaterialSpinner_px_arrow_tint, textColor)
+            hideArrow = ta.getBoolean(R.styleable.MaterialSpinner_px_hide_arrow, false)
+            hintText = ta.getString(R.styleable.MaterialSpinner_px_hint) ?: ""
 
             popupWindowMaxHeight =
-                ta.getDimensionPixelSize(R.styleable.MaterialSpinner_ms_dropdown_max_height, 0)
+                ta.getDimensionPixelSize(R.styleable.MaterialSpinner_px_dropdown_max_height, 0)
             popupWindowHeight = ta.getLayoutDimension(
-                R.styleable.MaterialSpinner_ms_dropdown_height,
+                R.styleable.MaterialSpinner_px_dropdown_height,
                 WindowManager.LayoutParams.WRAP_CONTENT
             )
             paddingTop = ta.getDimensionPixelSize(
-                R.styleable.MaterialSpinner_ms_padding_top,
+                R.styleable.MaterialSpinner_px_padding_top,
                 defaultPaddingTop
             )
             paddingLeft = ta.getDimensionPixelSize(
-                R.styleable.MaterialSpinner_ms_padding_left,
+                R.styleable.MaterialSpinner_px_padding_left,
                 defaultPaddingLeft
             )
             paddingBottom = ta.getDimensionPixelSize(
-                R.styleable.MaterialSpinner_ms_padding_bottom,
+                R.styleable.MaterialSpinner_px_padding_bottom,
                 defaultPaddingTop
             )
             paddingRight = ta.getDimensionPixelSize(
-                R.styleable.MaterialSpinner_ms_padding_right,
+                R.styleable.MaterialSpinner_px_padding_right,
                 defaultPaddingRight
             )
             popupPaddingTop = ta.getDimensionPixelSize(
-                R.styleable.MaterialSpinner_ms_popup_padding_top,
+                R.styleable.MaterialSpinner_px_popup_padding_top,
                 defaultPopupPaddingBottom
             )
             popupPaddingLeft = ta.getDimensionPixelSize(
-                R.styleable.MaterialSpinner_ms_popup_padding_left,
+                R.styleable.MaterialSpinner_px_popup_padding_left,
                 defaultPopupPaddingRight
             )
             popupPaddingBottom = ta.getDimensionPixelSize(
-                R.styleable.MaterialSpinner_ms_popup_padding_bottom,
+                R.styleable.MaterialSpinner_px_popup_padding_bottom,
                 defaultPopupPaddingBottom
             )
             popupPaddingRight = ta.getDimensionPixelSize(
-                R.styleable.MaterialSpinner_ms_popup_padding_right,
+                R.styleable.MaterialSpinner_px_popup_padding_right,
                 defaultPopupPaddingRight
             )
-            placeHolderDrawable = ta.getDrawable(R.styleable.MaterialSpinner_ms_placeholder)
+            placeHolderDrawable = ta.getDrawable(R.styleable.MaterialSpinner_px_placeholder)
             iconSize =
-                ta.getDimensionPixelSize(R.styleable.MaterialSpinner_ms_icon_size, defaultIconSize)
+                ta.getDimensionPixelSize(R.styleable.MaterialSpinner_px_icon_size, defaultIconSize)
 
             arrowColorDisabled = lighter(arrowColor, 0.8f)
         } finally {
@@ -192,7 +176,7 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
         setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom)
         mTextView.setPadding(paddingLeft / 2, 0, 0, 0)
 
-        setBackgroundResource(R.drawable.ms__selector)
+        setBackgroundResource(R.drawable.px__selector)
 
         if (MIN_SKD_JELLY_BEAN_MR1 && rtl) {
             mTextView.layoutDirection = LAYOUT_DIRECTION_RTL
@@ -233,10 +217,10 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
             isFocusable = true
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 elevation = 16f
-                setBackgroundDrawable(getDrawable(context, R.drawable.ms__drawable))
+                setBackgroundDrawable(getDrawable(context, R.drawable.px__drawable))
             } else {
                 setBackgroundDrawable(
-                    getDrawable(context, R.drawable.ms__drop_down_shadow)
+                    getDrawable(context, R.drawable.px__drop_down_shadow)
                 )
             }
             setOnDismissListener {
@@ -293,7 +277,7 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
 
     private fun updateArrow(rtl: Boolean) {
         if (hideArrow) return
-        arrowDrawable = getDrawable(context, R.drawable.ms__arrow)?.mutate()
+        arrowDrawable = getDrawable(context, R.drawable.px__arrow_rotate)?.mutate()
         arrowDrawable?.setColorFilterSrcIn(arrowColor)
 
         val drawables = mTextView.compoundDrawables
@@ -653,7 +637,7 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
         if (mAdapter == null) {
             return WindowManager.LayoutParams.WRAP_CONTENT
         }
-        val itemHeight = resources.getDimension(R.dimen.ms__item_height)
+        val itemHeight = resources.getDimension(R.dimen.px__item_height)
         val listViewHeight = mAdapter!!.itemCount * itemHeight
         if (popupWindowMaxHeight > 0 && listViewHeight > popupWindowMaxHeight) {
             return popupWindowMaxHeight

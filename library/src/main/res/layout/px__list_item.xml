@@ -7,9 +7,9 @@
 
     <ImageView
         android:id="@+id/iv_icon"
-        android:layout_width="@dimen/ms__icon_size"
-        android:layout_height="@dimen/ms__icon_size"
-        android:minHeight="@dimen/ms__icon_size"
+        android:layout_width="@dimen/px__icon_size"
+        android:layout_height="@dimen/px__icon_size"
+        android:minHeight="@dimen/px__icon_size"
         />
 
     <TextView
@@ -19,12 +19,12 @@
         android:layout_gravity="start|center_vertical"
         android:ellipsize="marquee"
         android:gravity="center_vertical"
-        android:minHeight="@dimen/ms__item_height"
-        android:paddingStart="@dimen/ms__popup_padding_left"
-        android:paddingLeft="@dimen/ms__popup_padding_left"
-        android:paddingTop="@dimen/ms__popup_padding_top"
-        android:paddingRight="@dimen/ms__popup_padding_left"
-        android:paddingBottom="@dimen/ms__popup_padding_top"
+        android:minHeight="@dimen/px__item_height"
+        android:paddingStart="@dimen/px__popup_padding_left"
+        android:paddingLeft="@dimen/px__popup_padding_left"
+        android:paddingTop="@dimen/px__popup_padding_top"
+        android:paddingRight="@dimen/px__popup_padding_left"
+        android:paddingBottom="@dimen/px__popup_padding_top"
         android:singleLine="true" />
 
 </LinearLayout>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="ms__padding_left">24dp</dimen>
-  <dimen name="ms__padding_top">12dp</dimen>
-  <dimen name="ms__item_height">48dp</dimen>
-  <dimen name="ms__icon_size">24dp</dimen>
-  <dimen name="ms__popup_padding_left">24dp</dimen>
-  <dimen name="ms__popup_padding_top">12dp</dimen>
+  <dimen name="px__padding_left">24dp</dimen>
+  <dimen name="px__padding_top">12dp</dimen>
+  <dimen name="px__item_height">48dp</dimen>
+  <dimen name="px__icon_size">24dp</dimen>
+  <dimen name="px__popup_padding_left">24dp</dimen>
+  <dimen name="px__popup_padding_top">12dp</dimen>
 </resources>
