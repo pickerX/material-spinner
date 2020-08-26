@@ -24,7 +24,9 @@ import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
+import kotlin.math.max
 
 internal val MIN_SKD_JELLY_BEAN_MR1 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
 
@@ -66,9 +68,9 @@ internal infix fun Drawable.setColorFilterSrcIn(color: Int) {
 internal fun darker(color: Int, factor: Float): Int {
     return Color.argb(
         Color.alpha(color),
-        Math.max((Color.red(color) * factor).toInt(), 0),
-        Math.max((Color.green(color) * factor).toInt(), 0),
-        Math.max((Color.blue(color) * factor).toInt(), 0)
+        max((Color.red(color) * factor).toInt(), 0),
+        max((Color.green(color) * factor).toInt(), 0),
+        max((Color.blue(color) * factor).toInt(), 0)
     )
 }
 
@@ -111,7 +113,5 @@ fun isRtl(context: Context): Boolean {
  * @return Drawable An object that can be used to draw this resource.
  */
 internal fun getDrawable(context: Context, id: Int): Drawable? {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        context.getDrawable(id)
-    } else context.resources.getDrawable(id)
+    return ResourcesCompat.getDrawable(context.resources, id, null)
 }

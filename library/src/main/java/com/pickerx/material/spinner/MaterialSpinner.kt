@@ -122,9 +122,9 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
             hintText = ta.getString(R.styleable.MaterialSpinner_px_hint) ?: ""
 
             popupWindowMaxHeight =
-                ta.getDimensionPixelSize(R.styleable.MaterialSpinner_px_dropdown_max_height, 0)
+                ta.getDimensionPixelSize(R.styleable.MaterialSpinner_px_spinner_max_height, 0)
             popupWindowHeight = ta.getLayoutDimension(
-                R.styleable.MaterialSpinner_px_dropdown_height,
+                R.styleable.MaterialSpinner_px_spinner_height,
                 WindowManager.LayoutParams.WRAP_CONTENT
             )
             paddingTop = ta.getDimensionPixelSize(
@@ -220,7 +220,7 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
                 setBackgroundDrawable(getDrawable(context, R.drawable.px__drawable))
             } else {
                 setBackgroundDrawable(
-                    getDrawable(context, R.drawable.px__drop_down_shadow)
+                    getDrawable(context, R.drawable.px__spinner_shadow)
                 )
             }
             setOnDismissListener {
@@ -232,6 +232,17 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
                 }
             }
         }
+    }
+
+    private fun resetListener() {
+        mAdapter?.onSpinnerClickListener = { _: View, index: Int, item: T ->
+            onItemSelectedListener?.onItemSelected(this, index, mAdapter!!.getItemId(index), item)
+            selectedIndex = index
+            nothingSelected = false
+            setTextColor(textColor)
+            collapse()
+        }
+        mAdapter?.bindSpinner({ mIconView }, { mTextView })
     }
 
     private fun initRecycler() {
@@ -246,22 +257,11 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
             setBackgroundSelector(backgroundSelector)
             setTextColor(textColor)
         }
+        resetListener()
+
         mRecyclerView = RecyclerView(context).apply {
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
-        }
-        mAdapter?.onSpinnerClickListener = { _: View, index: Int, item: T ->
-            mTextView.text = item.toString()
-            onItemSelectedListener?.onItemSelected(
-                this@MaterialSpinner,
-                index,
-                mAdapter!!.getItemId(index),
-                item
-            )
-            selectedIndex = index
-            nothingSelected = false
-            setTextColor(textColor)
-            collapse()
         }
 
 //        mRecyclerView!!.onItemClickListener = OnItemClickListener { parent, view, position, id ->
@@ -403,9 +403,7 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
-        if (arrowDrawable != null) {
-            arrowDrawable!! setColorFilterSrcIn (if (enabled) arrowColor else arrowColorDisabled)
-        }
+        arrowDrawable?.setColorFilterSrcIn(if (enabled) arrowColor else arrowColorDisabled)
     }
 
     /**
@@ -425,6 +423,7 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
             mAdapter!!.notifyItemSelected(position)
             selectedIndex = position
             mTextView.text = mAdapter?.getItemText(position)
+            mAdapter?.reselectedDrawable(position)
         } else {
             throw IllegalArgumentException("Position must be lower than adapter count!")
         }
@@ -487,7 +486,7 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
             setTextColor(textColor)
             setItemRetrieveListener(retrieve)
         }
-
+        resetListener()
         setAdapterInternal(this.mAdapter!!)
     }
 
@@ -508,6 +507,7 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
                 popupPaddingBottom
             )
         }
+        resetListener()
         setAdapterInternal(adapter)
     }
 
@@ -576,9 +576,7 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
     fun setArrowColor(@ColorInt color: Int) {
         arrowColor = color
         arrowColorDisabled = lighter(arrowColor, 0.8f)
-        if (arrowDrawable != null) {
-            arrowDrawable!!.setColorFilterSrcIn(arrowColor)
-        }
+        arrowDrawable?.setColorFilterSrcIn(arrowColor)
     }
 
     private fun canShowPopup(): Boolean {
@@ -641,7 +639,10 @@ class MaterialSpinner<T> constructor(context: Context, attrs: AttributeSet?, def
         val listViewHeight = mAdapter!!.itemCount * itemHeight
         if (popupWindowMaxHeight > 0 && listViewHeight > popupWindowMaxHeight) {
             return popupWindowMaxHeight
-        } else if (popupWindowHeight != WindowManager.LayoutParams.MATCH_PARENT && popupWindowHeight != WindowManager.LayoutParams.WRAP_CONTENT && popupWindowHeight <= listViewHeight) {
+        } else if (popupWindowHeight != WindowManager.LayoutParams.MATCH_PARENT &&
+            popupWindowHeight != WindowManager.LayoutParams.WRAP_CONTENT &&
+            popupWindowHeight <= listViewHeight
+        ) {
             return popupWindowHeight
         } else if (listViewHeight == 0f && mAdapter!!.getItems().size == 1) {
             return itemHeight.toInt()

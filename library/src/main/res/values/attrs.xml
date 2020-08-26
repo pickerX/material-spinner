@@ -6,8 +6,8 @@
         <attr name="px_background_color" format="color" />
         <attr name="px_text_color" format="color" />
         <attr name="px_icon_size" format="dimension" />
-        <attr name="px_dropdown_max_height" format="dimension" />
-        <attr name="px_dropdown_height" format="dimension">
+        <attr name="px_spinner_max_height" format="dimension" />
+        <attr name="px_spinner_height" format="dimension">
             <enum name="fill_parent" value="-1" />
             <enum name="match_parent" value="-1" />
             <enum name="wrap_content" value="-2" />

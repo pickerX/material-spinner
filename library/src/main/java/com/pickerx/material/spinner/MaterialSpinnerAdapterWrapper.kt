@@ -42,10 +42,4 @@ internal class MaterialSpinnerAdapterWrapper<T>(
     override fun get(position: Int): T {
         return mRetrieve.getItem(position)
     }
-
-    override fun getItemText(item: T): String {
-        return item.toString()
-    }
-
-    override fun getItemIcon(item: T): Int = 0
 }

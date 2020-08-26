@@ -2,7 +2,6 @@ package com.pickerx.material.spinner
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 
 typealias IsSameContent <T> = (T, T) -> Boolean
+
 typealias OnSpinnerItemClick<T> = (View, Int, T) -> Unit
 
 abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
@@ -31,6 +31,9 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
 
     private var placeHolderDrawable: Drawable? = null
 
+    private lateinit var getSpinnerIconView: () -> ImageView?
+    private lateinit var getSpinnerTextView: () -> TextView
+
     var isHintEnabled = false
 
     open var checkSameItem: IsSameContent<T> = { a: T, b: T ->
@@ -44,44 +47,43 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
         val itemView = inflater.inflate(R.layout.px__list_item, parent, false)
-        val vh = ViewHolder(itemView)
-        vh.itemView.setOnClickListener {
-            val position = vh.adapterPosition
+        return ViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val h = holder as ViewHolder
+        h.itemView.setOnClickListener {
+            getSpinnerIconView.invoke()?.setImageDrawable(h.icon.drawable)
+            getSpinnerTextView.invoke().text = h.text.text
+
             onSpinnerClickListener?.invoke(it, position, getItem(position))
             notifyItemSelected(position)
         }
         if (backgroundSelector != 0) {
-            vh.itemView.setBackgroundResource(backgroundSelector)
+            h.itemView.setBackgroundResource(backgroundSelector)
         }
-        vh.itemView.setPadding(
+        h.itemView.setPadding(
             paddingLeft,
             paddingTop,
             paddingRight,
             paddingBottom
         )
-        return vh
-    }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val h = holder as ViewHolder
         h.text.setTextColor(textColor)
         h.text.setPadding(paddingLeft / 2, 0, 0, 0)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (MIN_SKD_JELLY_BEAN_MR1) {
             val config = context.resources.configuration
             if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
                 h.text.textDirection = View.TEXT_DIRECTION_RTL
             }
         }
-        val item = getItem(position)
-        h.text.text = getItemText(item)
-
+        h.text.text = getItemText(position)
         h.icon.visibility = View.GONE
 
         if (iconSize > 0) {
             val p = h.icon.layoutParams
             p.height = iconSize
             p.width = iconSize
-            h.icon.layoutParams = p
         }
 
         placeHolderDrawable?.let {
@@ -89,29 +91,35 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
             h.icon.setImageDrawable(it)
         }
 
-        val iconRes = getItemIcon(item)
-        if (iconRes != 0) {
+        getItemDrawable(position)?.let {
             h.icon.visibility = View.VISIBLE
-            h.icon.setImageResource(iconRes)
+            h.icon.setImageDrawable(it)
         }
 
-        downloadIcon(item, h.icon)
+        downloadIcon(getItem(position), h.icon, position)
     }
+
+    open fun getItemText(position: Int): String = getItem(position).toString()
 
     /***
      * implement download icon by user
      * default empty implement
      */
-    open fun downloadIcon(item: T, imageView: ImageView) {}
-
-    open fun getItemText(position: Int): String = getItem(position).toString()
-
-    abstract fun getItemText(item: T): String
+    open fun downloadIcon(item: T, imageView: ImageView, position: Int) {}
 
     /**
      * get icon resource as placeholder icon
      */
-    abstract fun getItemIcon(item: T): Int
+    open fun getItemDrawable(position: Int): Drawable? = null
+
+    internal fun reselectedDrawable(position: Int) {
+        val drawable = getItemDrawable(position)
+        val icon = getSpinnerIconView.invoke()
+
+        drawable?.let { icon?.setImageDrawable(it) }
+
+        icon?.let { downloadIcon(getItem(position), it, position) }
+    }
 
     fun notifyItemSelected(index: Int) {
         selectedIndex = index
@@ -181,7 +189,12 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
 
     fun selectedItem(): T = items[selectedIndex]
 
-    private class ViewHolder(
+    fun bindSpinner(homeIconView: () -> ImageView?, homeTextView: () -> TextView) {
+        this.getSpinnerIconView = homeIconView
+        this.getSpinnerTextView = homeTextView
+    }
+
+    internal class ViewHolder(
         itemView: View,
         val text: TextView = itemView.findViewById(R.id.tv_tinted_spinner),
         val icon: ImageView = itemView.findViewById(R.id.iv_icon)
