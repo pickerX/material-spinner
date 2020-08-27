@@ -1,11 +1,9 @@
 package com.pickerx.material.sample
 
-import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.snackbar.Snackbar
@@ -35,28 +33,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val spinner: MaterialSpinner<String> = findViewById(R.id.spinner)
-        spinner.setAdapter(object : MaterialSpinnerAdapter<String>(this) {
+        val spinner: MaterialSpinner = findViewById(R.id.spinner)
+        val adapter = object : MaterialSpinnerAdapter<String>(this) {
             override fun downloadIcon(item: String, imageView: ImageView, position: Int) {}
 
             override fun getItemDrawable(position: Int): Drawable? {
                 return ResourcesCompat.getDrawable(resources, R.mipmap.ic_wukong, null)
             }
-        })
+        }
+        adapter.onSpinnerSelectedListener = { view: View, i: Int, s: String ->
+            Snackbar.make(view, "Clicked${s}", Snackbar.LENGTH_LONG).show()
+        }
+        spinner.setAdapter(adapter)
+
         spinner.setItems(ANDROID_VERSIONS)
-        spinner.setOnItemSelectedListener(object : MaterialSpinner.OnItemSelectedListener<String> {
-            override fun onItemSelected(
-                view: MaterialSpinner<String>,
-                position: Int,
-                id: Long,
-                item: String
-            ) {
-                Snackbar.make(view, "Clicked $item", Snackbar.LENGTH_LONG).show()
-            }
-        })
+
         spinner.setOnNothingSelectedListener(object :
             MaterialSpinner.OnNothingSelectedListener<String> {
-            override fun onNothingSelected(spinner: MaterialSpinner<String>) {
+            override fun onNothingSelected(spinner: MaterialSpinner) {
                 Snackbar.make(spinner, "Nothing selected", Snackbar.LENGTH_LONG).show()
             }
         })
