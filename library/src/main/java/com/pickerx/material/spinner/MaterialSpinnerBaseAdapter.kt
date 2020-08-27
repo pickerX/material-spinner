@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 
 typealias IsSameContent <T> = (T, T) -> Boolean
@@ -39,10 +38,7 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
     private var iconSize = 0
 
     private var placeHolderDrawable: Drawable? = null
-
-    private lateinit var getSpinnerIconView: () -> ImageView?
-    private lateinit var getSpinnerTextView: () -> TextView
-
+    private lateinit var spinner: MaterialSpinner
     var isHintEnabled = false
 
     open var checkSameItem: IsSameContent<T> = { a: T, b: T ->
@@ -77,11 +73,11 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
         val h = holder as ViewHolder
         h.itemView.setOnClickListener {
             // update spinner view
-            getSpinnerIconView.invoke()?.setImageDrawable(h.icon.drawable)
-            getSpinnerTextView.invoke().text = h.text.text
+            spinner.getIconView()?.setImageDrawable(h.icon.drawable)
+            spinner.getTextView().text = h.text.text
             // selected listener
-            onSpinnerPreSelectedListener?.invoke(it, position, getItem(position))
-            onSpinnerSelectedListener?.invoke(it, position, getItem(position))
+            onSpinnerPreSelectedListener?.invoke(spinner, position, getItem(position))
+            onSpinnerSelectedListener?.invoke(spinner, position, getItem(position))
             notifyItemSelected(position)
         }
         // background
@@ -147,7 +143,7 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
 
     internal fun reselectedDrawable(position: Int) {
         val drawable = getItemDrawable(position)
-        val icon = getSpinnerIconView.invoke()
+        val icon = spinner.getIconView()
 
         icon?.let {
             drawable?.let { d -> it.setImageDrawable(d) }
@@ -231,9 +227,8 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
     /**
      * bind the spinner main view for update text, drawable by auto
      */
-    internal fun bind(homeIconView: () -> ImageView?, homeTextView: () -> TextView) {
-        this.getSpinnerIconView = homeIconView
-        this.getSpinnerTextView = homeTextView
+    internal fun bind(spinner: MaterialSpinner) {
+        this.spinner = spinner
     }
 
     internal class ViewHolder(

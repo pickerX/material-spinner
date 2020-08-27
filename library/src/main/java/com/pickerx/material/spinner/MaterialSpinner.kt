@@ -241,7 +241,7 @@ class MaterialSpinner constructor(context: Context, attrs: AttributeSet?, defSty
             setTextColor(textColor)
             collapse()
         }
-        adapter.bind({ mIconView }, { mTextView })
+        adapter.bind(this)
     }
 
     private fun initRecycler() {
@@ -480,6 +480,7 @@ class MaterialSpinner constructor(context: Context, attrs: AttributeSet?, defSty
 
         adapter.isHintEnabled = !TextUtils.isEmpty(hintText)
         mRecyclerView!!.adapter = adapter
+        this.adapter = adapter
         if (selectedIndex >= adapter.itemCount) {
             selectedIndex = 0
         }
@@ -595,6 +596,10 @@ class MaterialSpinner constructor(context: Context, attrs: AttributeSet?, defSty
         popupWindowHeight = height
         mPopupWindow!!.height = calculatePopupWindowHeight()
     }
+
+    internal fun getTextView() = mTextView
+
+    internal fun getIconView() = mIconView
 
     private fun calculatePopupWindowHeight(): Int {
         val itemHeight = resources.getDimension(R.dimen.px__item_height)
