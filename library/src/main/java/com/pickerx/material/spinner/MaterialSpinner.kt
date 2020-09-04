@@ -616,26 +616,7 @@ class MaterialSpinner constructor(context: Context, attrs: AttributeSet?, defSty
         }
         return WindowManager.LayoutParams.WRAP_CONTENT
     }
-
-    /**
-     * Interface definition for a callback to be invoked when an item in this view has been selected.
-     *
-     * @param <T> Adapter item type
-     */
-    interface OnItemSelectedListener<T> {
-        /**
-         *
-         * Callback method to be invoked when an item in this view has been selected. This callback is invoked only when
-         * the newly selected position is different from the previously selected position or if there was no selected
-         * item.
-         *
-         * @param view The [MaterialSpinner] view
-         * @param position The position of the view in the adapter
-         * @param item The selected item
-         */
-        fun onItemSelected(view: MaterialSpinner, position: Int, item: T)
-    }
-
+    
     /**
      * Interface definition for a callback to be invoked when the dropdown is dismissed and no item was selected.
      */

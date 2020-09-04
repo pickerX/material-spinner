@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:px_spinner_height="wrap_content"
         app:px_spinner_max_height="350dp"
         app:px_icon_size="@dimen/px__icon_size"
         app:px_placeholder="@mipmap/ic_launcher" />

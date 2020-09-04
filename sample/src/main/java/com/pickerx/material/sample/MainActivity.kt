@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 return ResourcesCompat.getDrawable(resources, R.mipmap.ic_wukong, null)
             }
         }
-        adapter.onSpinnerSelectedListener = { view: View, i: Int, s: String ->
+        adapter.onItemSelectedListener = { view: View, i: Int, s: String ->
             Snackbar.make(view, "Clicked${s}", Snackbar.LENGTH_LONG).show()
         }
         spinner.setAdapter(adapter)

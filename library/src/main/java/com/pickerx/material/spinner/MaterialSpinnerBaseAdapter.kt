@@ -18,7 +18,7 @@ typealias IsSameContent <T> = (T, T) -> Boolean
  * @param [Int] the position of item selected
  * @param [T] the data of item
  */
-typealias OnSpinnerSelectedListener<T> = (View, Int, T) -> Unit
+typealias OnItemSelectedListener<T> = (View, Int, T) -> Unit
 
 /**
  * Base adapter for Spinner RecycleView
@@ -51,12 +51,12 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
      * This callback is invoked only when the newly selected position is different from
      * the previously selected position or if there was no selected item.
      */
-    var onSpinnerSelectedListener: OnSpinnerSelectedListener<T>? = null
+    var onItemSelectedListener: OnItemSelectedListener<T>? = null
 
     /**
-     * Callback listener to be invoked before [onSpinnerSelectedListener] when an item has been selected.
+     * Callback listener to be invoked before [onItemSelectedListener] when an item has been selected.
      */
-    internal var onSpinnerPreSelectedListener: OnSpinnerSelectedListener<T>? = null
+    internal var onSpinnerPreSelectedListener: OnItemSelectedListener<T>? = null
 
     /**
      * data set
@@ -71,15 +71,6 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val h = holder as ViewHolder
-        h.itemView.setOnClickListener {
-            // update spinner view
-            spinner.getIconView()?.setImageDrawable(h.icon.drawable)
-            spinner.getTextView().text = h.text.text
-            // selected listener
-            onSpinnerPreSelectedListener?.invoke(spinner, position, getItem(position))
-            onSpinnerSelectedListener?.invoke(spinner, position, getItem(position))
-            notifyItemSelected(position)
-        }
         // background
         if (backgroundSelector != 0) {
             h.itemView.setBackgroundResource(backgroundSelector)
@@ -122,6 +113,16 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
         }
 
         downloadIcon(getItem(position), h.icon, position)
+
+        h.itemView.setOnClickListener {
+            // update spinner view
+            spinner.getIconView()?.setImageDrawable(h.icon.drawable)
+            spinner.getTextView().text = h.text.text
+            // selected listener
+            onSpinnerPreSelectedListener?.invoke(spinner, position, getItem(position))
+            onItemSelectedListener?.invoke(spinner, position, getItem(position))
+            notifyItemSelected(position)
+        }
     }
 
     /**
@@ -159,10 +160,7 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
         return position.toLong()
     }
 
-    override fun getItemCount(): Int {
-        val size = items.size
-        return if (size == 1 || isHintEnabled) size else size - 1
-    }
+    override fun getItemCount(): Int = items.size
 
     /**
      * set new data
@@ -183,21 +181,7 @@ abstract class MaterialSpinnerBaseAdapter<T>(private val context: Context) :
      */
     fun getItems() = items
 
-    open fun getItem(position: Int): T {
-        items.let {
-            return if (isHintEnabled) {
-                it[position]
-            } else if (position >= selectedIndex && it.size != 1) {
-                it[position + 1]
-            } else {
-                it[position]
-            }
-        }
-    }
-
-    open fun get(position: Int): T {
-        return items[position]
-    }
+    open fun getItem(position: Int): T = items[position]
 
     fun setTextColor(@ColorInt textColor: Int) {
         this.textColor = textColor
